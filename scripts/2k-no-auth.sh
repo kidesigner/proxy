@@ -56,7 +56,7 @@ setuid 65535
 stacksize 6291456
 flush
 auth strong
-allow * *
+allow * * *
 #allow * * facebook.com,*.facebook.com
 #allow * * google.com,*.google.com,*.gstatic.com
 #allow * * tiktok.com,*.tiktok.com
