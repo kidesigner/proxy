@@ -57,9 +57,11 @@ stacksize 6291456
 flush
 auth strong
 allow * *
+#allow * * facebook.com,*.facebook.com
+#allow * * google.com,*.google.com,*.gstatic.com
+#allow * * tiktok.com,*.tiktok.com
 deny *
 proxy
-flush
 
 users $(awk -F "/" 'BEGIN{ORS="";} {print $1 ":CL:" $2 " "}' ${WORKDATA})
 
@@ -76,7 +78,6 @@ $(awk -F "/" '{print $3 ":" $4 ":" $1 ":" $2 }' ${WORKDATA})
 EOF
 }
 
-}
 gen_data() {
     seq $FIRST_PORT $LAST_PORT | while read port; do
         echo "$(random)/$(random)/$IP4/$port/$(gen64 $IP6)"
