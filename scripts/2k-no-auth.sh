@@ -55,8 +55,20 @@ setgid 65535
 setuid 65535
 stacksize 6291456
 flush
-auth none
-allow * *
+auth strong
+allow * * facebook.com,*.facebook.com
+allow * * google.com,*.google.com,*.gstatic.com
+allow * * tiktok.com,*.tiktok.com
+deny *
+proxy
+flush
+
+users $(awk -F "/" 'BEGIN{ORS="";} {print $1 ":CL:" $2 " "}' ${WORKDATA})
+
+$(awk -F "/" '{print "auth none\n" \
+"allow " $1 "\n" \
+"proxy -6 -n -a -p" $4 " -i" $3 " -e"$5"\n" \
+"flush\n"}' ${WORKDATA})
 EOF
 }
 
@@ -65,14 +77,6 @@ gen_proxy_file_for_user() {
 $(awk -F "/" '{print $3 ":" $4 ":" $1 ":" $2 }' ${WORKDATA})
 EOF
 }
-
-upload_proxy() {
-    cd $WORKDIR
-    local PASS=$(random)
-    zip ${IP4}.zip proxy.txt
-    URL=$(curl -F "file=@${IP4}.zip" https://file.io)
-    echo "Download zip archive from: ${URL}"
-
 
 }
 gen_data() {
@@ -123,7 +127,7 @@ cat >>/etc/rc.local <<EOF
 # ifup ${main_interface}
 bash ${WORKDIR}/boot_iptables.sh
 bash ${WORKDIR}/boot_ifconfig.sh
-ulimit -n 65535
+ulimit -n 12864
 /usr/local/etc/3proxy/bin/3proxy /usr/local/etc/3proxy/3proxy.cfg &
 EOF
 
