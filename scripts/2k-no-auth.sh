@@ -60,7 +60,7 @@ allow * *
 #allow * * facebook.com,*.facebook.com
 #allow * * google.com,*.google.com,*.gstatic.com
 #allow * * tiktok.com,*.tiktok.com
-deny *
+#deny *
 proxy
 
 users $(awk -F "/" 'BEGIN{ORS="";} {print $1 ":CL:" $2 " "}' ${WORKDATA})
@@ -133,5 +133,6 @@ EOF
 bash /etc/rc.local
 
 gen_proxy_file_for_user
+rm -rf /root/3proxy-3proxy-0.9.4
 
-upload_proxy
+echo "Starting Proxy"
